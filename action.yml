@@ -1,0 +1,11 @@
+---
+name: Dependency drift tracker
+description: >
+  Track your dependency drift across multiple repositories using libyear.
+author: François de Metz
+branding:
+  color: blue
+  icon: code
+runs:
+  using: node16
+  main: dist/index.mjs

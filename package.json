@@ -1,0 +1,25 @@
+{
+  "name": "dependency-drift-tracker-action",
+  "version": "0.0.1",
+  "description": "Track your dependency drift across multiple repositories using libyear.",
+  "scripts": {
+    "prepare": "ncc build bin/main.mjs -o dist --source-map --license licenses.txt"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/1024pix/dependency-drift-tracker.git"
+  },
+  "author": "François de Metz",
+  "bugs": {
+    "url": "https://github.com/1024pix/dependency-drift-tracker/issues"
+  },
+  "homepage": "https://github.com/1024pix/dependency-drift-tracker#readme",
+  "license": "GPL",
+  "dependencies": {
+    "dependency-drift-tracker": "1024pix/dependency-drift-tracker",
+    "simple-git": "^3.19.0"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.36.1"
+  }
+}
