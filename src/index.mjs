@@ -1,3 +1,4 @@
+import core from '@actions/core';
 import simpleGit from 'simple-git';
 import { main as dependencyDriftTracker } from 'dependency-drift-tracker';
 
@@ -9,10 +10,13 @@ export async function main() {
 }
 
 export async function commitChange(simpleGit) {
-  await simpleGit.addConfig('user.name', 'Dependency drift tracker');
-  await simpleGit.addConfig('user.email', 'dependency-drift-tracker@users.noreply.github.com');
+  const userName = core.getInput('user-name');
+  await simpleGit.addConfig('user.name', userName);
+  const userEmail = core.getInput('user-email');
+  await simpleGit.addConfig('user.email', userEmail);
   await simpleGit.add('data');
-  await simpleGit.commit('Update data');
+  const commitMessage = core.getInput('commit-message');
+  await simpleGit.commit(commitMessage);
 }
 
 export async function pushChange(simpleGit) {

@@ -6,6 +6,19 @@ author: François de Metz
 branding:
   color: blue
   icon: code
+inputs:
+  commit-message:
+    description: 'The message of the update commit'
+    required: false
+    default: 'Update data'
+  user-name:
+    description: 'The user name of the commit'
+    required: false
+    default: 'Dependency drift tracker'
+  user-email:
+    description: 'The user email of the commit'
+    required: false
+    default: 'dependency-drift-tracker@users.noreply.github.com'
 runs:
   using: node16
   main: dist/index.mjs
