@@ -1,18 +1,10 @@
-import { access, constants } from 'node:fs/promises';
-import { join } from 'node:path';
 import core from '@actions/core';
 import simpleGit from 'simple-git';
 import { main as dependencyDriftTracker } from 'dependency-drift-tracker';
-import { cwd } from 'node:process';
+import { version } from 'node:process';
 
 export async function main() {
-  const basePath = cwd();
-  const filePath = join(basePath, 'data', `data/history-github-com-indoorequal-mapbox-gl-indoorequal-git-.json`);
-  try {
-    await access(filePath, constants.F_OK);
-  } catch (e) {
-    core.error(`Exception ${e}`);
-  }
+  core.error(version);
 
   const git = simpleGit();
   await dependencyDriftTracker();

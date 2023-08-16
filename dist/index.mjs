@@ -40052,10 +40052,6 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 
-;// CONCATENATED MODULE: external "node:fs/promises"
-const promises_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:fs/promises");
-;// CONCATENATED MODULE: external "node:path"
-const external_node_path_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:path");
 // EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
 var core = __nccwpck_require__(42186);
 // EXTERNAL MODULE: ./node_modules/@kwsites/file-exists/dist/index.js
@@ -44199,8 +44195,12 @@ var esm_default = gitInstanceFactory;
 
 //# sourceMappingURL=index.js.map
 
+;// CONCATENATED MODULE: external "node:fs/promises"
+const promises_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:fs/promises");
 ;// CONCATENATED MODULE: external "node:os"
 const external_node_os_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:os");
+;// CONCATENATED MODULE: external "node:path"
+const external_node_path_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:path");
 ;// CONCATENATED MODULE: external "node:util"
 const external_node_util_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:util");
 ;// CONCATENATED MODULE: external "node:child_process"
@@ -49147,16 +49147,8 @@ function createSummary(result) {
 
 
 
-
-
 async function src_main() {
-  const basePath = (0,external_node_process_namespaceObject.cwd)();
-  const filePath = (0,external_node_path_namespaceObject.join)(basePath, 'data', `data/history-github-com-indoorequal-mapbox-gl-indoorequal-git-.json`);
-  try {
-    await (0,promises_namespaceObject.access)(filePath, promises_namespaceObject.constants.F_OK);
-  } catch (e) {
-    core.error(`Exception ${e}`);
-  }
+  core.error(external_node_process_namespaceObject.version);
 
   const git = esm_default();
   await main();
