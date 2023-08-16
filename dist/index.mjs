@@ -44197,6 +44197,8 @@ var esm_default = gitInstanceFactory;
 
 ;// CONCATENATED MODULE: external "node:fs/promises"
 const promises_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:fs/promises");
+;// CONCATENATED MODULE: external "node:fs"
+const external_node_fs_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:fs");
 ;// CONCATENATED MODULE: external "node:os"
 const external_node_os_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:os");
 ;// CONCATENATED MODULE: external "node:path"
@@ -49031,6 +49033,7 @@ function replaceRepositoryWithSafeChar(line) {
 
 
 
+
 const { satisfies } = semver;
 
 const exec = external_node_util_namespaceObject.promisify(external_node_child_process_namespaceObject.exec);
@@ -49119,7 +49122,7 @@ async function saveResult(basePath, line, summary, result) {
 async function saveSummary(basePath, line, summary) {
   const filePath = (0,external_node_path_namespaceObject.join)(basePath, 'data', `history-${replaceRepositoryWithSafeChar(line)}.json`);
   try {
-    await (0,promises_namespaceObject.access)(filePath, promises_namespaceObject.constants.F_OK);
+    await (0,promises_namespaceObject.access)(filePath, external_node_fs_namespaceObject.constants.F_OK);
   } catch (e) {
     await (0,promises_namespaceObject.writeFile)(filePath, JSON.stringify([]));
   }
@@ -49146,10 +49149,7 @@ function createSummary(result) {
 
 
 
-
 async function src_main() {
-  core.error(external_node_process_namespaceObject.version);
-
   const git = esm_default();
   await main();
   await commitChange(git);

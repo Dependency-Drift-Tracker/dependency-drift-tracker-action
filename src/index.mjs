@@ -1,11 +1,8 @@
 import core from '@actions/core';
 import simpleGit from 'simple-git';
 import { main as dependencyDriftTracker } from 'dependency-drift-tracker';
-import { version } from 'node:process';
 
 export async function main() {
-  core.error(version);
-
   const git = simpleGit();
   await dependencyDriftTracker();
   await commitChange(git);
