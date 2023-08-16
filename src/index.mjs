@@ -1,4 +1,5 @@
 import { access, constants } from 'node:fs/promises';
+import { join } from 'node:path';
 import core from '@actions/core';
 import simpleGit from 'simple-git';
 import { main as dependencyDriftTracker } from 'dependency-drift-tracker';
