@@ -21,6 +21,6 @@
     "simple-git": "^3.19.0"
   },
   "devDependencies": {
-    "@vercel/ncc": "^0.36.1"
+    "@vercel/ncc": "^0.38.0"
   }
 }
