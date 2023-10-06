@@ -7,6 +7,9 @@ branding:
   color: blue
   icon: code
 inputs:
+  command:
+    required: true
+    description: "Command to run (generate-website or update-data)"
   commit-message:
     description: 'The message of the update commit'
     required: false

@@ -18,7 +18,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Update data
       uses: francois2metz/dependency-drift-tracker-action@main
+      with:
+        command: update-data
+```
+
+Update the website:
+
+```yml
+name: Update website
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate-website:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Generate website
+      uses: francois2metz/dependency-drift-tracker-action@main
+      with:
+        command: generate-website
 ```

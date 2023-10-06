@@ -2,8 +2,9 @@
   "name": "dependency-drift-tracker-action",
   "version": "0.0.1",
   "description": "Track your dependency drift across multiple repositories using libyear.",
+  "type": "module",
   "scripts": {
-    "prepare": "ncc build bin/main.mjs -o dist --source-map --license licenses.txt"
+    "prepare": "ncc build bin/main.mjs --out dist --source-map --license licenses.txt"
   },
   "repository": {
     "type": "git",
@@ -17,7 +18,7 @@
   "license": "GPL",
   "dependencies": {
     "@actions/core": "^1.10.0",
-    "dependency-drift-tracker": "1024pix/dependency-drift-tracker",
+    "dependency-drift-tracker": "1024pix/dependency-drift-tracker#generate-website",
     "simple-git": "^3.19.0"
   },
   "devDependencies": {
