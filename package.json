@@ -18,7 +18,7 @@
   "license": "GPL",
   "dependencies": {
     "@actions/core": "^1.10.0",
-    "dependency-drift-tracker": "1024pix/dependency-drift-tracker#generate-website",
+    "dependency-drift-tracker": "1024pix/dependency-drift-tracker",
     "simple-git": "^3.19.0"
   },
   "devDependencies": {
