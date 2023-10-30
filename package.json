@@ -4,7 +4,7 @@
   "description": "Track your dependency drift across multiple repositories using libyear.",
   "type": "module",
   "scripts": {
-    "prepare": "ncc build bin/main.mjs --out dist --source-map --license licenses.txt"
+    "prepare": "ncc build bin/main.js --out dist --source-map --license licenses.txt"
   },
   "repository": {
     "type": "git",

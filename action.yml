@@ -24,4 +24,4 @@ inputs:
     default: 'dependency-drift-tracker@users.noreply.github.com'
 runs:
   using: node20
-  main: dist/index.mjs
+  main: dist/index.js

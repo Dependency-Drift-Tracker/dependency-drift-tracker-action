@@ -49161,7 +49161,7 @@ function createSummary(result) {
   }, { drift: 0, pulse: 0, date: new Date() });
 }
 
-;// CONCATENATED MODULE: ./src/index.mjs
+;// CONCATENATED MODULE: ./src/index.js
 
 
 
@@ -49228,7 +49228,7 @@ async function pushWebsite() {
   await pushChange(git);
 }
 
-;// CONCATENATED MODULE: ./bin/main.mjs
+;// CONCATENATED MODULE: ./bin/main.js
 
 
 src_main();
@@ -49236,4 +49236,4 @@ src_main();
 })();
 
 
-//# sourceMappingURL=index.mjs.map
+//# sourceMappingURL=index.js.map
