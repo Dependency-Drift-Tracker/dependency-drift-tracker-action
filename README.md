@@ -1,5 +1,9 @@
 # Dependency drift tracker GitHub Action
 
+Use [dependency-drift-tracker][] with GitHub action. Schedule the update every day and track your dependencies drift and use GitHub Page to display a webpage.
+
+### Usage
+
 Example usage:
 
 ```yml
@@ -20,7 +24,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Update data
-      uses: francois2metz/dependency-drift-tracker-action@main
+      uses: Dependency-Drift-Tracker/dependency-drift-tracker-action@main
       with:
         command: update-data
 ```
@@ -44,7 +48,13 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Generate website
-      uses: francois2metz/dependency-drift-tracker-action@main
+      uses: Dependency-Drift-Tracker/dependency-drift-tracker-action@main
       with:
         command: generate-website
 ```
+
+## License
+
+GNU GPL 3
+
+[dependency-drift-tracker]: https://github.com/Dependency-Drift-Tracker/dependency-drift-tracker
