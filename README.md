@@ -24,7 +24,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Update data
-      uses: Dependency-Drift-Tracker/dependency-drift-tracker-action@main
+      uses: Dependency-Drift-Tracker/dependency-drift-tracker-action@v1
       with:
         command: update-data
 ```
@@ -48,7 +48,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Generate website
-      uses: Dependency-Drift-Tracker/dependency-drift-tracker-action@main
+      uses: Dependency-Drift-Tracker/dependency-drift-tracker-action@v1
       with:
         command: generate-website
 ```
