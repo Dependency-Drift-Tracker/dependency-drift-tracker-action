@@ -49171,10 +49171,23 @@ async function src_main() {
   const command = core.getInput('command');
   switch (command) {
   case 'update-data':
-    await updateData()
+    exportSecretsAsEnvironmentVariables();
+    await updateData();
     break;
   case 'generate-website':
     await src_generateWebsite();
+  }
+}
+
+function exportSecretsAsEnvironmentVariables() {
+  const secretsJson = core.getInput('secrets');
+  let secrets = {};
+  try {
+    secrets = JSON.parse(secretsJson);
+  } catch (e) {}
+
+  for (const [key, value] of Object.entries(secrets)) {
+    process.env[key] = value;
   }
 }
 

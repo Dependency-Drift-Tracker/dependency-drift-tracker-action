@@ -22,6 +22,9 @@ inputs:
     description: 'The user email of the commit'
     required: false
     default: 'dependency-drift-tracker@users.noreply.github.com'
+  secrets:
+    description: 'GitHub action secrets as JSON to be exposed as environment variables to dependency-drift-tracker'
+    required: false
 runs:
   using: node20
   main: dist/index.js
