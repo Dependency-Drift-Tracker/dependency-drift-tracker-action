@@ -3,6 +3,8 @@ import core from '@actions/core';
 import simpleGit from 'simple-git';
 import { main as dependencyDriftTracker, generateWebsite as dependencyDriftTrackerGenerateWebsite } from 'dependency-drift-tracker';
 
+const websiteDir = 'website';
+
 export async function main() {
   const command = core.getInput('command');
   switch (command) {
@@ -49,7 +51,7 @@ async function commitWebsite(simpleGit) {
   await simpleGit.addConfig('user.name', userName);
   const userEmail = core.getInput('user-email');
   await simpleGit.addConfig('user.email', userEmail);
-  await simpleGit.add('docs');
+  await simpleGit.add(websiteDir);
   const commitMessage = 'Update website';
   await simpleGit.commit(commitMessage);
 }
@@ -64,7 +66,7 @@ async function generateWebsite() {
 
   try {
     const distDir = await dependencyDriftTrackerGenerateWebsite(url);
-    cpSync(distDir, './docs', { recursive: true });
+    cpSync(distDir, `./${websiteDir}`, { recursive: true });
     await pushWebsite();
   } catch (err) {
     core.error(err);
@@ -74,5 +76,5 @@ async function generateWebsite() {
 async function pushWebsite() {
   const git = simpleGit();
   await commitWebsite(git);
-  await pushChange(git);
+  await git.raw(['subtree', 'push', '--prefix', websiteDir, 'origin', 'gh-pages']);
 }
