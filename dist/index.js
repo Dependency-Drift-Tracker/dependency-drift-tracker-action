@@ -49167,6 +49167,8 @@ function createSummary(result) {
 
 
 
+const websiteDir = 'website';
+
 async function src_main() {
   const command = core.getInput('command');
   switch (command) {
@@ -49213,7 +49215,7 @@ async function commitWebsite(simpleGit) {
   await simpleGit.addConfig('user.name', userName);
   const userEmail = core.getInput('user-email');
   await simpleGit.addConfig('user.email', userEmail);
-  await simpleGit.add('docs');
+  await simpleGit.add(websiteDir);
   const commitMessage = 'Update website';
   await simpleGit.commit(commitMessage);
 }
@@ -49228,7 +49230,7 @@ async function src_generateWebsite() {
 
   try {
     const distDir = await generateWebsite(url);
-    (0,external_node_fs_namespaceObject.cpSync)(distDir, './docs', { recursive: true });
+    (0,external_node_fs_namespaceObject.cpSync)(distDir, `./${websiteDir}`, { recursive: true });
     await pushWebsite();
   } catch (err) {
     core.error(err);
@@ -49238,7 +49240,7 @@ async function src_generateWebsite() {
 async function pushWebsite() {
   const git = esm_default();
   await commitWebsite(git);
-  await pushChange(git);
+  await git.raw(['subtree', 'push', '--prefix', websiteDir, 'origin', 'gh-pages']);
 }
 
 ;// CONCATENATED MODULE: ./bin/main.js
