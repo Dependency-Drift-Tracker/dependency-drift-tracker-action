@@ -49240,7 +49240,8 @@ async function src_generateWebsite() {
 async function pushWebsite() {
   const git = esm_default();
   await commitWebsite(git);
-  await git.raw(['subtree', 'push', '--prefix', websiteDir, 'origin', 'gh-pages']);
+  await git.raw(['subtree', 'split', '--prefix', websiteDir, '--branch', 'gh-pages']);
+  await git.raw(['push', '--force', 'origin', 'gh-pages:gh-pages']);
 }
 
 ;// CONCATENATED MODULE: ./bin/main.js

@@ -76,5 +76,6 @@ async function generateWebsite() {
 async function pushWebsite() {
   const git = simpleGit();
   await commitWebsite(git);
-  await git.raw(['subtree', 'push', '--prefix', websiteDir, 'origin', 'gh-pages']);
+  await git.raw(['subtree', 'split', '--prefix', websiteDir, '--branch', 'gh-pages']);
+  await git.raw(['push', '--force', 'origin', 'gh-pages:gh-pages']);
 }
