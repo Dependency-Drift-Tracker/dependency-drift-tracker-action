@@ -39568,6 +39568,14 @@ module.exports = Queue;
 
 /***/ }),
 
+/***/ 32207:
+/***/ ((module) => {
+
+module.exports = eval("require")("");
+
+
+/***/ }),
+
 /***/ 30132:
 /***/ ((module) => {
 
@@ -40294,6 +40302,12 @@ function pick(source, properties) {
 function delay(duration = 0) {
   return new Promise((done) => setTimeout(done, duration));
 }
+function orVoid(input) {
+  if (input === false) {
+    return void 0;
+  }
+  return input;
+}
 var NULL, NOOP, objectToString;
 var init_util = __esm({
   "src/lib/utils/util.ts"() {
@@ -40559,6 +40573,7 @@ __export(utils_exports, {
   isUserFunction: () => isUserFunction,
   last: () => last,
   objectToString: () => objectToString,
+  orVoid: () => orVoid,
   parseStringResponse: () => parseStringResponse,
   pick: () => pick,
   prefixedArray: () => prefixedArray,
@@ -40990,6 +41005,29 @@ var init_config = __esm({
       GitConfigScope2["worktree"] = "worktree";
       return GitConfigScope2;
     })(GitConfigScope || {});
+  }
+});
+
+// src/lib/tasks/diff-name-status.ts
+function isDiffNameStatus(input) {
+  return diffNameStatus.has(input);
+}
+var DiffNameStatus, diffNameStatus;
+var init_diff_name_status = __esm({
+  "src/lib/tasks/diff-name-status.ts"() {
+    DiffNameStatus = /* @__PURE__ */ ((DiffNameStatus2) => {
+      DiffNameStatus2["ADDED"] = "A";
+      DiffNameStatus2["COPIED"] = "C";
+      DiffNameStatus2["DELETED"] = "D";
+      DiffNameStatus2["MODIFIED"] = "M";
+      DiffNameStatus2["RENAMED"] = "R";
+      DiffNameStatus2["CHANGED"] = "T";
+      DiffNameStatus2["UNMERGED"] = "U";
+      DiffNameStatus2["UNKNOWN"] = "X";
+      DiffNameStatus2["BROKEN"] = "B";
+      return DiffNameStatus2;
+    })(DiffNameStatus || {});
+    diffNameStatus = new Set(Object.values(DiffNameStatus));
   }
 });
 
@@ -41628,6 +41666,21 @@ var init_commit = __esm({
   }
 });
 
+// src/lib/tasks/first-commit.ts
+function first_commit_default() {
+  return {
+    firstCommit() {
+      return this._runTask(straightThroughStringTask(["rev-list", "--max-parents=0", "HEAD"], true), trailingFunctionArgument(arguments));
+    }
+  };
+}
+var init_first_commit = __esm({
+  "src/lib/tasks/first-commit.ts"() {
+    init_utils();
+    init_task();
+  }
+});
+
 // src/lib/tasks/hash-object.ts
 function hashObjectTask(filePath, write) {
   const commands = ["hash-object", filePath];
@@ -41749,6 +41802,7 @@ var init_parse_diff_summary = __esm({
   "src/lib/parsers/parse-diff-summary.ts"() {
     init_log_format();
     init_DiffSummary();
+    init_diff_name_status();
     init_utils();
     statParser = [
       new LineParser(/(.+)\s+\|\s+(\d+)(\s+[+\-]+)?$/, (result, [file, changes, alterations = ""]) => {
@@ -41814,11 +41868,12 @@ var init_parse_diff_summary = __esm({
       })
     ];
     nameStatusParser = [
-      new LineParser(/([ACDMRTUXB])\s*(.+)$/, (result, [_status, file]) => {
+      new LineParser(/([ACDMRTUXB])([0-9]{0,3})\t(.[^\t]*)(\t(.[^\t]*))?$/, (result, [status, _similarity, from, _to, to]) => {
         result.changed++;
         result.files.push({
-          file,
+          file: to != null ? to : from,
           changes: 0,
+          status: orVoid(isDiffNameStatus(status) && status),
           insertions: 0,
           deletions: 0,
           binary: false
@@ -42648,6 +42703,7 @@ var init_simple_git_api = __esm({
     init_checkout();
     init_commit();
     init_config();
+    init_first_commit();
     init_grep();
     init_hash_object();
     init_init();
@@ -42721,7 +42777,7 @@ var init_simple_git_api = __esm({
         return this._runTask(statusTask(getTrailingOptions(arguments)), trailingFunctionArgument(arguments));
       }
     };
-    Object.assign(SimpleGitApi.prototype, checkout_default(), commit_default(), config_default(), grep_default(), log_default(), show_default(), version_default());
+    Object.assign(SimpleGitApi.prototype, checkout_default(), commit_default(), config_default(), first_commit_default(), grep_default(), log_default(), show_default(), version_default());
   }
 });
 
@@ -43717,6 +43773,7 @@ init_task_configuration_error();
 init_check_is_repo();
 init_clean();
 init_config();
+init_diff_name_status();
 init_grep();
 init_reset();
 
@@ -49003,6 +49060,150 @@ const libyear = async (packageManager, flags) => Promise.all(Array.from((await g
 
 // EXTERNAL MODULE: ./node_modules/preferred-pm/index.js
 var preferred_pm = __nccwpck_require__(31797);
+;// CONCATENATED MODULE: ./node_modules/dependency-drift-tracker/node_modules/yocto-queue/index.js
+/*
+How it works:
+`this.#head` is an instance of `Node` which keeps track of its current value and nests another instance of `Node` that keeps the value that comes after it. When a value is provided to `.enqueue()`, the code needs to iterate through `this.#head`, going deeper and deeper to find the last value. However, iterating through every single item is slow. This problem is solved by saving a reference to the last value as `this.#tail` so that it can reference it to add a new value.
+*/
+
+class Node {
+	value;
+	next;
+
+	constructor(value) {
+		this.value = value;
+	}
+}
+
+class Queue {
+	#head;
+	#tail;
+	#size;
+
+	constructor() {
+		this.clear();
+	}
+
+	enqueue(value) {
+		const node = new Node(value);
+
+		if (this.#head) {
+			this.#tail.next = node;
+			this.#tail = node;
+		} else {
+			this.#head = node;
+			this.#tail = node;
+		}
+
+		this.#size++;
+	}
+
+	dequeue() {
+		const current = this.#head;
+		if (!current) {
+			return;
+		}
+
+		this.#head = this.#head.next;
+		this.#size--;
+		return current.value;
+	}
+
+	clear() {
+		this.#head = undefined;
+		this.#tail = undefined;
+		this.#size = 0;
+	}
+
+	get size() {
+		return this.#size;
+	}
+
+	* [Symbol.iterator]() {
+		let current = this.#head;
+
+		while (current) {
+			yield current.value;
+			current = current.next;
+		}
+	}
+}
+
+// EXTERNAL MODULE: ./node_modules/@vercel/ncc/dist/ncc/@@notfound.js?#async_hooks
+var _notfound_async_hooks = __nccwpck_require__(32207);
+;// CONCATENATED MODULE: ./node_modules/dependency-drift-tracker/node_modules/p-limit/index.js
+
+
+
+function pLimit(concurrency) {
+	if (!((Number.isInteger(concurrency) || concurrency === Number.POSITIVE_INFINITY) && concurrency > 0)) {
+		throw new TypeError('Expected `concurrency` to be a number from 1 and up');
+	}
+
+	const queue = new Queue();
+	let activeCount = 0;
+
+	const next = () => {
+		activeCount--;
+
+		if (queue.size > 0) {
+			queue.dequeue()();
+		}
+	};
+
+	const run = async (function_, resolve, arguments_) => {
+		activeCount++;
+
+		const result = (async () => function_(...arguments_))();
+
+		resolve(result);
+
+		try {
+			await result;
+		} catch {}
+
+		next();
+	};
+
+	const enqueue = (function_, resolve, arguments_) => {
+		queue.enqueue(
+			_notfound_async_hooks.AsyncResource.bind(run.bind(undefined, function_, resolve, arguments_)),
+		);
+
+		(async () => {
+			// This function needs to wait until the next microtask before comparing
+			// `activeCount` to `concurrency`, because `activeCount` is updated asynchronously
+			// when the run function is dequeued and called. The comparison in the if-statement
+			// needs to happen asynchronously as well to get an up-to-date value for `activeCount`.
+			await Promise.resolve();
+
+			if (activeCount < concurrency && queue.size > 0) {
+				queue.dequeue()();
+			}
+		})();
+	};
+
+	const generator = (function_, ...arguments_) => new Promise(resolve => {
+		enqueue(function_, resolve, arguments_);
+	});
+
+	Object.defineProperties(generator, {
+		activeCount: {
+			get: () => activeCount,
+		},
+		pendingCount: {
+			get: () => queue.size,
+		},
+		clearQueue: {
+			value() {
+				queue.clear();
+			},
+		},
+	});
+
+	return generator;
+}
+
 ;// CONCATENATED MODULE: ./node_modules/dependency-drift-tracker/src/utils.js
 function parseFile(content) {
   return content.split('\n').map((line) => {
@@ -49025,7 +49226,11 @@ function replaceRepositoryWithSafeChar(line) {
   return line.replaceAll(/(https?:\/\/)/g, '').replaceAll(/(-|\/|:|\.|#)/g, '-');
 }
 
+;// CONCATENATED MODULE: ./node_modules/dependency-drift-tracker/package.json
+const package_namespaceObject = {"i8":"0.3.0"};
 ;// CONCATENATED MODULE: ./node_modules/dependency-drift-tracker/src/index.js
+
+
 
 
 
@@ -49052,7 +49257,7 @@ const installCommand = {
 };
 
 async function generateWebsite(repositoryUrl, env = {}, websiteUrl = 'https://github.com/Dependency-Drift-Tracker/dependency-drift-tracker.git') {
-  const tempDir = await cloneRepository(websiteUrl, esm_default(), {});
+  const tempDir = await cloneRepository(websiteUrl, esm_default(), {}, { '--branch': `v${package_namespaceObject.i8}` });
   await exec('npm install --production=false', { cwd: tempDir });
   await exec('npm run build -- --public-url ./', { cwd: tempDir, env: {
     ...process.env,
@@ -49068,23 +49273,34 @@ async function main() {
   const content = await (0,promises_namespaceObject.readFile)(filePath, { encoding: 'utf8' });
   const lines = parseFile(content);
   const clonedRepositoriesPath = await cloneRepositories(lines);
-  const installResult = await Promise.all(lines.map(async ({ repository, path }) => {
-    const repositoryPath = clonedRepositoriesPath[repository];
-    const packagePath = (0,external_node_path_namespaceObject.join)(repositoryPath, path);
-    const packageManager = await getPreferredPm(packagePath);
-    await installDependencies(packagePath, packageManager);
-    return {
-      repository,
-      path,
-      packagePath,
-      packageManager,
-    };
+  const limit = pLimit(3);
+  const installResult = await Promise.all(lines.map(({ repository, path }) => {
+    return limit(async () => {
+      try {
+        const repositoryPath = clonedRepositoriesPath[repository];
+        const packagePath = (0,external_node_path_namespaceObject.join)(repositoryPath, path);
+        const packageManager = await getPreferredPm(packagePath);
+        await installDependencies(packagePath, packageManager);
+        return {
+          repository,
+          path,
+          packagePath,
+          packageManager,
+        };
+      } catch(e) {
+        throw new Error(`Error while processing the ${repository}#${path}: ${e}`);
+      }
+    });
   }));
+  const indexResult = {};
   for await (const { repository, path, packagePath, packageManager } of installResult) {
+    const line = `${repository}#${path}`;
     const result = await calculateRepository(packagePath, packageManager);
     const summary = createSummary(result);
-    await saveResult(basePath, `${repository}#${path}`, summary, result);
+    indexResult[line] = summary;
+    await saveResult(basePath, line, summary, result);
   }
+  await saveIndexFile(basePath, indexResult);
 }
 
 async function cloneRepositories(lines) {
@@ -49099,12 +49315,16 @@ async function cloneRepositories(lines) {
 }
 
 async function getPreferredPm(packagePath) {
-  const pm = (await preferred_pm(packagePath)).name;
-  if (pm === 'yarn') {
-    const { stdout } = await exec('yarn --version', { cwd: packagePath });
-    return satisfies(stdout, "^0 || ^1") ? "yarn" : "berry";
+  try {
+    const pm = (await preferred_pm(packagePath)).name;
+    if (pm === 'yarn') {
+      const { stdout } = await exec('yarn --version', { cwd: packagePath });
+      return satisfies(stdout, "^0 || ^1") ? "yarn" : "berry";
+    }
+    return pm;
+  } catch (e) {
+    throw new Error('Cannot determine package manager.');
   }
-  return pm;
 }
 
 function replaceRepositoryVariablesWithEnvVariables(repository, variables) {
@@ -49113,9 +49333,9 @@ function replaceRepositoryVariablesWithEnvVariables(repository, variables) {
   }, repository);
 }
 
-async function cloneRepository(repository, simpleGit, env) {
+async function cloneRepository(repository, simpleGit, env, gitOptions = {}) {
   const tempRepositoryPath = await (0,promises_namespaceObject.mkdtemp)((0,external_node_path_namespaceObject.join)((0,external_node_os_namespaceObject.tmpdir)(), external_node_path_namespaceObject.sep));
-  await simpleGit.clone(replaceRepositoryVariablesWithEnvVariables(repository, env), tempRepositoryPath, { '--depth': 1 })
+  await simpleGit.clone(replaceRepositoryVariablesWithEnvVariables(repository, env), tempRepositoryPath, { '--depth': 1, ...gitOptions })
   return tempRepositoryPath;
 }
 
@@ -49159,6 +49379,11 @@ function createSummary(result) {
     memo.pulse += dep.pulse || 0;
     return memo;
   }, { drift: 0, pulse: 0, date: new Date() });
+}
+
+async function saveIndexFile(basePath, indexResult) {
+  const filePath = (0,external_node_path_namespaceObject.join)(basePath, 'data', 'index.json');
+  await (0,promises_namespaceObject.writeFile)(filePath, JSON.stringify(indexResult));
 }
 
 ;// CONCATENATED MODULE: ./src/index.js
