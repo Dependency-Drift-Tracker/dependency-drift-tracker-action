@@ -39568,14 +39568,6 @@ module.exports = Queue;
 
 /***/ }),
 
-/***/ 32207:
-/***/ ((module) => {
-
-module.exports = eval("require")("");
-
-
-/***/ }),
-
 /***/ 30132:
 /***/ ((module) => {
 
@@ -49129,10 +49121,7 @@ class Queue {
 	}
 }
 
-// EXTERNAL MODULE: ./node_modules/@vercel/ncc/dist/ncc/@@notfound.js?#async_hooks
-var _notfound_async_hooks = __nccwpck_require__(32207);
 ;// CONCATENATED MODULE: ./node_modules/dependency-drift-tracker/node_modules/p-limit/index.js
-
 
 
 function pLimit(concurrency) {
@@ -49151,10 +49140,10 @@ function pLimit(concurrency) {
 		}
 	};
 
-	const run = async (function_, resolve, arguments_) => {
+	const run = async (fn, resolve, args) => {
 		activeCount++;
 
-		const result = (async () => function_(...arguments_))();
+		const result = (async () => fn(...args))();
 
 		resolve(result);
 
@@ -49165,10 +49154,8 @@ function pLimit(concurrency) {
 		next();
 	};
 
-	const enqueue = (function_, resolve, arguments_) => {
-		queue.enqueue(
-			_notfound_async_hooks.AsyncResource.bind(run.bind(undefined, function_, resolve, arguments_)),
-		);
+	const enqueue = (fn, resolve, args) => {
+		queue.enqueue(run.bind(undefined, fn, resolve, args));
 
 		(async () => {
 			// This function needs to wait until the next microtask before comparing
@@ -49183,8 +49170,8 @@ function pLimit(concurrency) {
 		})();
 	};
 
-	const generator = (function_, ...arguments_) => new Promise(resolve => {
-		enqueue(function_, resolve, arguments_);
+	const generator = (fn, ...args) => new Promise(resolve => {
+		enqueue(fn, resolve, args);
 	});
 
 	Object.defineProperties(generator, {
@@ -49195,7 +49182,7 @@ function pLimit(concurrency) {
 			get: () => queue.size,
 		},
 		clearQueue: {
-			value() {
+			value: () => {
 				queue.clear();
 			},
 		},
@@ -49227,7 +49214,7 @@ function replaceRepositoryWithSafeChar(line) {
 }
 
 ;// CONCATENATED MODULE: ./node_modules/dependency-drift-tracker/package.json
-const package_namespaceObject = {"i8":"0.3.0"};
+const package_namespaceObject = {"i8":"0.3.1"};
 ;// CONCATENATED MODULE: ./node_modules/dependency-drift-tracker/src/index.js
 
 
