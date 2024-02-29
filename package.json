@@ -1,6 +1,6 @@
 {
   "name": "dependency-drift-tracker-action",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "Track your dependency drift across multiple repositories using libyear and GitHub action.",
   "type": "module",
   "scripts": {
