@@ -37250,7 +37250,7 @@ function replaceRepositoryWithSafeChar(line) {
 }
 
 ;// CONCATENATED MODULE: ./node_modules/dependency-drift-tracker/package.json
-const package_namespaceObject = {"rE":"0.4.0"};
+const package_namespaceObject = {"rE":"0.4.1"};
 ;// CONCATENATED MODULE: ./node_modules/dependency-drift-tracker/src/index.js
 
 
@@ -37283,7 +37283,7 @@ async function generateWebsite(repositoryUrl, env = {}, websiteUrl = 'https://gi
   const tempDir = await cloneRepository(websiteUrl, esm_default(), {}, { '--branch': `v${package_namespaceObject.rE}` });
   await exec('npm install --production=false', { cwd: tempDir });
   await exec('npm run build -- --public-url ./', { cwd: tempDir, env: {
-    ...process.env,
+    ...external_node_process_.env,
     REPOSITORY_URL: repositoryUrl,
     ...env,
   }});
@@ -37291,7 +37291,7 @@ async function generateWebsite(repositoryUrl, env = {}, websiteUrl = 'https://gi
 }
 
 async function main() {
-  const basePath = (0,external_node_process_.cwd)();
+  const basePath = external_node_process_.cwd();
   const filePath = (0,external_node_path_.join)(basePath, 'repositories.txt');
   const content = await (0,promises_.readFile)(filePath, { encoding: 'utf8' });
   const lines = parseFile(content);
@@ -37330,7 +37330,7 @@ async function cloneRepositories(lines) {
   const clonedRepositoriesPath = {};
   for await (const { repository } of lines) {
     if (!clonedRepositoriesPath[repository]) {
-      const repositoryPath = await cloneRepository(repository, esm_default(), process.env);
+      const repositoryPath = await cloneRepository(repository, esm_default(), external_node_process_.env);
       clonedRepositoriesPath[repository] = repositoryPath;
     }
   }
@@ -37367,10 +37367,10 @@ function installDependencies(packagePath, packageManager) {
 }
 
 async function calculateRepository(packagePath, packageManager) {
-  const previousDir = (0,external_node_process_.cwd)();
-  (0,external_node_process_.chdir)(packagePath);
-  const result = await libyear(packageManager, { all: true });
-  (0,external_node_process_.chdir)(previousDir);
+  const previousDir = external_node_process_.cwd();
+  external_node_process_.chdir(packagePath);
+  const result = await libyear(packageManager);
+  external_node_process_.chdir(previousDir);
   return result;
 }
 
