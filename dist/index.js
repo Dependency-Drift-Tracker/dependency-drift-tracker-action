@@ -37250,7 +37250,7 @@ function replaceRepositoryWithSafeChar(line) {
 }
 
 ;// CONCATENATED MODULE: ./node_modules/dependency-drift-tracker/package.json
-const package_namespaceObject = {"rE":"0.4.1"};
+const package_namespaceObject = {"rE":"0.4.2"};
 ;// CONCATENATED MODULE: ./node_modules/dependency-drift-tracker/src/index.js
 
 
@@ -37369,7 +37369,7 @@ function installDependencies(packagePath, packageManager) {
 async function calculateRepository(packagePath, packageManager) {
   const previousDir = external_node_process_.cwd();
   external_node_process_.chdir(packagePath);
-  const result = await libyear(packageManager);
+  const result = await libyear(packageManager, { dev: true });
   external_node_process_.chdir(previousDir);
   return result;
 }
