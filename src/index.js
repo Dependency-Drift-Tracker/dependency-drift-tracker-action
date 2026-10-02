@@ -1,6 +1,6 @@
 import { cpSync } from 'node:fs';
 import { getInput, error } from '@actions/core';
-import simpleGit from 'simple-git';
+import { simpleGit } from 'simple-git';
 import { main as dependencyDriftTracker, generateWebsite as dependencyDriftTrackerGenerateWebsite } from 'dependency-drift-tracker';
 
 const websiteDir = 'website';
