@@ -19,7 +19,7 @@
   "dependencies": {
     "@actions/core": "^3.0.0",
     "dependency-drift-tracker": "^0.4.2",
-    "simple-git": "^3.19.0"
+    "simple-git": "^4.0.0"
   },
   "devDependencies": {
     "@vercel/ncc": "^0.45.0"
