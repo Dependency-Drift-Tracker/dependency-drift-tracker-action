@@ -1,12 +1,12 @@
 import { cpSync } from 'node:fs';
-import core from '@actions/core';
+import { getInput, error } from '@actions/core';
 import simpleGit from 'simple-git';
 import { main as dependencyDriftTracker, generateWebsite as dependencyDriftTrackerGenerateWebsite } from 'dependency-drift-tracker';
 
 const websiteDir = 'website';
 
 export async function main() {
-  const command = core.getInput('command');
+  const command = getInput('command');
   switch (command) {
   case 'update-data':
     exportSecretsAsEnvironmentVariables();
@@ -18,7 +18,7 @@ export async function main() {
 }
 
 function exportSecretsAsEnvironmentVariables() {
-  const secretsJson = core.getInput('secrets');
+  const secretsJson = getInput('secrets');
   let secrets = {};
   try {
     secrets = JSON.parse(secretsJson);
@@ -37,19 +37,19 @@ async function updateData() {
 }
 
 async function commitDataChange(simpleGit) {
-  const userName = core.getInput('user-name');
+  const userName = getInput('user-name');
   await simpleGit.addConfig('user.name', userName);
-  const userEmail = core.getInput('user-email');
+  const userEmail = getInput('user-email');
   await simpleGit.addConfig('user.email', userEmail);
   await simpleGit.add('data');
-  const commitMessage = core.getInput('commit-message');
+  const commitMessage = getInput('commit-message');
   await simpleGit.commit(commitMessage);
 }
 
 async function commitWebsite(simpleGit) {
-  const userName = core.getInput('user-name');
+  const userName = getInput('user-name');
   await simpleGit.addConfig('user.name', userName);
-  const userEmail = core.getInput('user-email');
+  const userEmail = getInput('user-email');
   await simpleGit.addConfig('user.email', userEmail);
   await simpleGit.add(websiteDir);
   const commitMessage = 'Update website';
@@ -69,7 +69,7 @@ async function generateWebsite() {
     cpSync(distDir, `./${websiteDir}`, { recursive: true });
     await pushWebsite();
   } catch (err) {
-    core.error(err);
+    error(err);
   }
 }
 
