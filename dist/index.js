@@ -64476,7 +64476,7 @@ function replaceRepositoryWithSafeChar(line) {
 }
 
 ;// CONCATENATED MODULE: ./node_modules/dependency-drift-tracker/package.json
-const package_namespaceObject = {"rE":"0.4.3"};
+const package_namespaceObject = {"rE":"0.5.0"};
 ;// CONCATENATED MODULE: ./node_modules/dependency-drift-tracker/src/index.js
 
 
